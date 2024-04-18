@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _EPOLL_H_
+#define _EPOLL_H_
 
 #include <sys/epoll.h>
 #include <vector>
@@ -18,3 +19,6 @@ public:
     void delete_channel(Channel*);
     std::vector<Channel*> poll(int timeout = -1);
 };
+
+
+#endif

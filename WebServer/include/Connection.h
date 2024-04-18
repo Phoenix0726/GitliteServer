@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CONNECTION_H_
+#define _CONNECTION_H_
 
 #include <functional>
 #include <fstream>
@@ -30,8 +31,6 @@ private:
     State state;
     Buffer* read_buffer;
     Buffer* send_buffer;
-
-    
 
     std::function<void(Socket*)> delete_connection_callback;
     std::function<void(Connection*)> on_connect_callback;
@@ -67,3 +66,6 @@ public:
     void send_buffer_getline();
     Socket* get_socket();
 };
+
+
+#endif

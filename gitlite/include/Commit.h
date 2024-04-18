@@ -22,6 +22,7 @@ public:
     Commit();
     Commit(string message, vector<string> parents, unordered_map<string, string> blobs);
     string getId();
+    string getFile();
     unordered_map<string, string> getBlobs();
     vector<string> getParents();
     string getMessage();

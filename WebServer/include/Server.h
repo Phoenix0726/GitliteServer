@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _SERVER_H_
+#define _SERVER_H_
 
 #include <map>
 #include <vector>
@@ -32,3 +33,6 @@ public:
     void on_message(std::function<void(Connection*)> fn);
     void new_connect(std::function<void(Connection*)> fn);
 };
+
+
+#endif

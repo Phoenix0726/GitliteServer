@@ -3,12 +3,15 @@
 #include <cstring>
 #include <unistd.h>
 #include <cstdio>
+#include <iostream>
 
 #include "Client.h"
 #include "util.h"
 #include "Socket.h"
 #include "InetAddress.h"
 #include "Buffer.h"
+
+using std::endl;
 
 #define BUFFER_SIZE 1024
 
@@ -31,44 +34,84 @@ Client::~Client() {
 }
 
 void Client::send(string str) {
-    if (str != "") {
-        send_buffer->set_buf(str.c_str());
-    }
-    
     int sockfd = sock->get_fd();
-    ssize_t write_bytes = write(sockfd, send_buffer->c_str(), send_buffer->size());
-    if (write_bytes == -1) {
-        printf("socket already disconnected, can't write any more!\n");
-        return;
-    }
 
-    int has_read = 0;
+    _write(str);
+
     char buf[BUFFER_SIZE];
     while (true) {
         bzero(&buf, sizeof(buf));
         ssize_t read_bytes = read(sockfd, buf, sizeof(buf));
         if (read_bytes > 0) {
-            read_buffer->append(buf, read_bytes);
-            has_read += read_bytes;
+            string str(buf);
+            if (str.substr(0, 8) == "received") {
+                if (str.size() > 8) {
+                    printf("server had received %s\n", str.substr(8).c_str());
+                }
+                break;
+            }
         } else if (read_bytes == 0) {
             printf("server disconnected!\n");
             exit(EXIT_SUCCESS);
         }
-
-        if (has_read >= send_buffer->size()) {
-            printf("message from server: %s\n", read_buffer->c_str());
-            break;
-        }
     }
-    read_buffer->clear();
 }
 
 void Client::sendfile(istream& fin) {
     while (true) {
-        send_buffer->getline(fin);
+        send_buffer->getline(fin);      // 按行读取文件
         if (send_buffer->size() == 0) {     // 文件读完了
+            send(":end");
             break;
         }
         send();
+    }
+}
+
+void Client::receive() {
+    int sockfd = sock->get_fd();
+    // 向服务器发送 clone 请求
+    _write("clone");
+
+    char buf[BUFFER_SIZE];
+    while (true) {
+        bzero(&buf, sizeof(buf));
+        ssize_t read_bytes = read(sockfd, buf, sizeof(buf));
+        if (read_bytes == 0) {
+            printf("server disconnected!\n");
+            exit(EXIT_SUCCESS);
+        }
+
+        string str(buf);
+        // printf("receive from server: %s\n", buf);
+        if (str.substr(0, 5) == "file:") {
+            const string filename = str.substr(6);
+            fout.open(".gitlite/objects/" + filename);
+
+            _write("received");
+        } else if (str == ":end") {
+            fout.close();
+
+            _write("received");
+        } else if (str == ":allend") {
+            break;
+        } else {
+            fout << str << endl;
+
+            _write("received");
+        }
+    }
+}
+
+void Client::_write(string str) {
+    if (str != "") {
+        send_buffer->set_buf(str.c_str());
+    }
+
+    int sockfd = sock->get_fd();
+    ssize_t write_bytes = write(sockfd, send_buffer->c_str(), send_buffer->size());
+    if (write_bytes == -1) {
+        printf("socket already disconnected, can't write any more!\n");
+        return;
     }
 }

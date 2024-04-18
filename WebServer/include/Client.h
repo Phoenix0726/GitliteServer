@@ -1,10 +1,12 @@
-#pragma once
+#ifndef _CLIENT_H_
+#define _CLIENT_H_
 
 #include <fstream>
 #include <iostream>
 #include <string>
 
 using std::istream;
+using std::ofstream;
 using std::string;
 
 
@@ -16,9 +18,17 @@ private:
     Socket* sock;
     Buffer* send_buffer;
     Buffer* read_buffer;
+
+    void _write(string str="");
 public:
+    ofstream fout;
+
     Client();
     ~Client();
     void send(string str="");
     void sendfile(istream& fin=std::cin);
+    void receive();
 };
+
+
+#endif

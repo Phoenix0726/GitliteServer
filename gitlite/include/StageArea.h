@@ -10,6 +10,9 @@ using std::unordered_set;
 using std::string;
 
 
+class Blob;
+
+
 class StageArea {
     unordered_map<string, string> added;
     unordered_set<string> removed;

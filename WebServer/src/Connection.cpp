@@ -71,7 +71,7 @@ void Connection::readnonblocking() {
             state = State::closed;
             break;
         } else {
-            printf("Ohter error on client fd %d\n", sockfd);
+            printf("Other error on client fd %d\n", sockfd);
             state = State::closed;
             break;
         }

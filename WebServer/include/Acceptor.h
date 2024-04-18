@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _ACCEPTOR_H_
+#define _ACCEPTOR_H_
 
 #include <functional>
 
@@ -19,3 +20,6 @@ public:
     void accept_connection();
     void set_new_connection_callback(std::function<void(Socket*)>);
 };
+
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _THREADPOOL_H_
+#define _THREADPOOL_H_
 
 #include <functional>
 #include <vector>
@@ -43,3 +44,6 @@ auto ThreadPool::add(F&& f, Args&&... args) -> std::future<typename std::result_
     cv.notify_one();
     return res;
 }
+
+
+#endif

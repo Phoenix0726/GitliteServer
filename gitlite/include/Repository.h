@@ -4,14 +4,19 @@
 #include <string>
 #include <filesystem>
 #include <unordered_set>
+#include <vector>
+#include <unordered_map>
 
 using std::string;
 using std::filesystem::current_path;
 using std::unordered_set;
+using std::unordered_map;
+using std::vector;
 
 
 class Blob;
 class Commit;
+class StageArea;
 
 
 class Repository {
@@ -25,6 +30,7 @@ public:
         |       |--main
         |--HEAD
         |--stage
+        |--USER
     */
     static const string CWD;
     static const string GITLITE_DIR;
@@ -33,6 +39,7 @@ public:
     static const string HEADS_DIR;
     static const string HEAD;
     static const string STAGE;
+    static const string USER;
 
     static void init();     // gitlite init
     static void add(string fileName);   // gitlite add [file name]
@@ -50,10 +57,13 @@ public:
     static void reset(string commitId);     // gitlite reset [commit]
     static void merge(string branchName);   // gitlite merge [branch name]
     static void push();     // gitlite push
+    static void clone();    // gitlite clone
+    static void set(string username);   // gitlite set username [username]
 
     static void checkIfInitialized();
     static Commit getCurCommit();
 private:
+    static string getUsername();
     static void setCurBranch(string branchName);
     static void initCommit();
     static void addCommit(Commit commit);

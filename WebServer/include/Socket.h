@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _SOCKET_H_
+#define _SOCKET_H_
 
 #include "InetAddress.h"
 
@@ -24,3 +25,6 @@ public:
 
     int get_fd();
 };
+
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CHANNEL_H_
+#define _CHANNEL_H_
 
 #include <sys/epoll.h>
 #include <functional>
@@ -31,3 +32,6 @@ public:
     void set_ready(uint32_t);
     void set_read_callback(std::function<void()>);
 };
+
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _EVENTLOOP_H_
+#define _EVENTLOOP_H_
 
 #include <functional>
 
@@ -18,3 +19,6 @@ public:
     void loop();
     void update_channel(Channel*);
 };
+
+
+#endif

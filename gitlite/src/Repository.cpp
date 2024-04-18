@@ -4,15 +4,20 @@
 #include "Commit.h"
 #include "StageArea.h"
 
+#include "../../WebServer/include/Client.h"
+
 #include <unistd.h>
 #include <sys/stat.h>
 #include <iostream>
 #include <algorithm>
 #include <queue>
+#include <fstream>
 
 using std::cout;
 using std::endl;
 using std::queue;
+using std::ifstream;
+using std::ofstream;
 
 
 const string Repository::CWD = current_path();
@@ -22,6 +27,7 @@ const string Repository::REFS_DIR = join(Repository::GITLITE_DIR, "refs");
 const string Repository::HEADS_DIR = join(Repository::REFS_DIR, "heads");
 const string Repository::HEAD = join(Repository::GITLITE_DIR, "HEAD");
 const string Repository::STAGE = join(Repository::GITLITE_DIR, "stage");
+const string Repository::USER = join(Repository::GITLITE_DIR, "user");
 
 // gitlite init
 void Repository::init() {
@@ -343,12 +349,62 @@ void Repository::merge(string branchName) {
 
 // gitlite push
 void Repository::push() {
+    Client client;
+
     Commit curCommit = getCurCommit();
+    ifstream commitFile(curCommit.getFile());
+
+    client.send("file: " + curCommit.getId());
+    client.sendfile(commitFile);
+    commitFile.close();
+    
     unordered_map<string, string> blobs = curCommit.getBlobs();
     for (auto it : blobs) {
         string blobId = it.second;
         Blob blob = getBlobById(blobId);
+        ifstream blobFile(blob.getFile());
+
+        client.send("file: " + blobId);
+        client.sendfile(blobFile);
+        blobFile.close();
     }
+}
+
+// gitlite clone
+void Repository::clone() {
+    Client client;
+
+    client.receive();
+
+    // 根据 .gitlite 读出当前 commit 源文件
+    Commit curCommit = getCurCommit();
+    unordered_map<string, string> blobs = curCommit.getBlobs();
+    for (auto it : blobs) {
+        string blobId = it.second;
+        printf("blobId: %s\n", blobId.c_str());
+        Blob blob = getBlobById(blobId);
+        blob.writeContentToSource();
+    }
+}
+
+void Repository::set(string username) {
+    ofstream fout(USER);
+    fout << username;
+    fout.close();
+}
+
+
+/* private function */
+
+string Repository::getUsername() {
+    ifstream fin(USER);
+    if (fin) {
+        string username;
+        fin >> username;
+        fin.close();
+        return username;
+    }
+    return "";
 }
 
 void Repository::setCurBranch(string branchName) {

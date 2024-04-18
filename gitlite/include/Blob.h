@@ -17,6 +17,7 @@ public:
     Blob(string srcFile);
     Blob(string id, string srcFile, string blobFile, vector<string> content);
     string getId();
+    string getFile();
     void save();
     string getContentAsString();
     void writeContentToSource();

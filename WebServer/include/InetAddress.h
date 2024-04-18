@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _INETADDRESS_H_
+#define _INETADDRESS_H_
 
 #include <arpa/inet.h>
 
@@ -15,3 +16,6 @@ public:
     sockaddr_in get_addr();
     socklen_t get_addr_len();
 };
+
+
+#endif

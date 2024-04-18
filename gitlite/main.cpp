@@ -1,4 +1,4 @@
-#include "Repository.hpp"
+#include "Repository.h"
 
 #include <iostream>
 #include <cstring>
@@ -107,6 +107,14 @@ int main(int argc, char** argv) {
         validateArgsNum(argc, 3);
         string branchName = argv[2];
         Repository::merge(branchName);
+    } else if (op == "push") {
+        Repository::checkIfInitialized();
+        validateArgsNum(argc, 2);
+        Repository::push();
+    } else if (op == "clone") {
+        Repository::checkIfInitialized();
+        validateArgsNum(argc, 2);
+        Repository::clone();
     } else {
         cout << "No command with that name exists." << endl;
     }

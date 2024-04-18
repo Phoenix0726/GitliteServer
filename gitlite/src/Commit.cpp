@@ -39,6 +39,10 @@ string Commit::getId() {
     return id;
 }
 
+string Commit::getFile() {
+    return file;
+}
+
 unordered_map<string, string> Commit::getBlobs() {
     return blobs;
 }
@@ -78,7 +82,7 @@ void Commit::save() {
         fout << it.first + '\n' + it.second + '\n';
     }
 
-    fout << date + '\n';
+    fout << date;
     fout << file + '\n';
     fout.close();
 }

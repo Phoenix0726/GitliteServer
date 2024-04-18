@@ -29,6 +29,10 @@ string Blob::getId() {
     return id;
 }
 
+string Blob::getFile() {
+    return blobFile;
+}
+
 void Blob::save() {
     string dir = getParentFile(blobFile);
     if (access(dir.c_str(), 0) == -1) {
