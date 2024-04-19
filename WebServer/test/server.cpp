@@ -10,12 +10,14 @@
 #include <fstream>
 #include <cstdio>
 #include <unistd.h>
+#include <queue>
 
 using std::string;
 using std::cout;
 using std::endl;
 using std::ofstream;
 using std::ifstream;
+using std::queue;
 
 
 void handle_request(Connection* conn);
@@ -70,44 +72,56 @@ void handle_request(Connection* conn) {
         return;
     }
 
+    /* clone start */
     if (str == "clone") {
-        vector<string> fileList = plainFilenamesIn("../htdc/objects");
-        printf("num of files: %d\n", (int)fileList.size());
-        for (string filename : fileList) {
-            printf("file %s\n", filename.c_str());
-            ifstream fin("../htdc/objects/" + filename);
-            string line = "file: " + filename;
-            while (true) {
-                if (line == "") fin >> line;
-                // printf("line %s\n", line.c_str());
-                if (line.size() == 0) {     // 该文件发完了
-                    line = ":end";
+        string dir_path = join(CWD, conn->username);
+        queue<string> fileq;
+        fileq.push(dir_path);
+        while (!fileq.empty()) {
+            string file = fileq.front();
+            fileq.pop();
+            if (isDir(file)) {  // 如果是文件夹，继续展开
+                vector<string> files = plainFilenamesIn(file);
+                for (auto it : files) {
+                    fileq.push(join(file, it));
                 }
-                conn->_send(line.c_str());
-                while (true) {      // 等待客户端接收
-                    if (conn->get_state() == Connection::State::closed) {
-                        conn->_close();
-                        return;
+            } else {    // 发送文件
+                ifstream fin(join(CWD, file));
+                string line = "file: " + getRelativePath(dir_path, file);
+                while (true) {
+                    if (line == "") getline(fin, line);
+                    // printf("line %s\n", line.c_str());
+                    if (line.size() == 0) {     // 该文件发完了
+                        line = ":end";
                     }
-                    conn->_read();
-                    string resp(conn->read_buffer_val());
-                    // printf("resp: %s\n", resp.c_str());
-                    if (resp == "received") {
+                    conn->_send(line.c_str());
+                    while (true) {      // 等待客户端接收
+                        if (conn->get_state() == Connection::State::closed) {
+                            conn->_close();
+                            return;
+                        }
+                        conn->_read();
+                        string resp(conn->read_buffer_val());
+                        // printf("resp: %s\n", resp.c_str());
+                        if (resp == "received") {
+                            break;
+                        }
+                    }
+                    if (line == ":end") {
                         break;
                     }
+                    line = "";
                 }
-                if (line == ":end") {
-                    break;
-                }
-                line = "";
             }
         }
+        
         conn->_send(":allend");
 
         printf("client fd %d disconnected\n", conn->get_socket()->get_fd());
         conn->_close();
         return;
     }
+    /* clone end */
     
     if (str.substr(0, 5) == "file:") {      // 收到文件名，把输出重定向到文件
         const string filename = str.substr(6);

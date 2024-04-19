@@ -12,6 +12,9 @@
 #include "InetAddress.h"
 #include "Buffer.h"
 
+#include "../../gitlite/include/Repository.h"
+#include "../../gitlite/include/Utils.h"
+
 using std::endl;
 using std::ifstream;
 
@@ -90,7 +93,11 @@ void Client::receive() {
         // printf("receive from server: %s\n", buf);
         if (str.substr(0, 5) == "file:") {
             const string filename = str.substr(6);
-            fout.open(".gitlite/objects/" + filename);
+            // printf("filename: %s\n", filename.c_str());
+            const string save_path = join(Repository::CWD, filename);
+            mkdirOfPath(save_path);     // 如果父文件夹不存在，先创建父文件夹
+
+            fout.open(save_path);
 
             _write("received");
         } else if (str == ":end") {

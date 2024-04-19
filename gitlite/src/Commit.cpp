@@ -78,12 +78,12 @@ void Commit::save() {
     }
 
     fout << blobs.size() << '\n';
-    for (auto it : blobs) {
-        fout << it.first + '\n' + it.second + '\n';
+    for (auto it : blobs) {     // first: filepath, second: blobId
+        fout << getRelativePath(Repository::CWD, it.first) + '\n' + it.second + '\n';
     }
 
     fout << date;
-    fout << file + '\n';
+    fout << getRelativePath(Repository::CWD, file) + '\n';  // commitFilepath
     fout.close();
 }
 
@@ -110,15 +110,16 @@ Commit Commit::readObject(string commitFile) {
 
     getline(fin, line);
     int bsize = atoi(line.c_str());
-    for (int i = 0; i < bsize; i++) {
+    for (int i = 0; i < bsize; i++) {   // blobfile blobid
         getline(fin, line);
         string line2;
         getline(fin, line2);
-        commit.blobs.insert({line, line2});
+        commit.blobs.insert({join(Repository::CWD, line), line2});
     }
 
     getline(fin, commit.date);
     getline(fin, commit.file);
+    commit.file = join(Repository::CWD, commit.file);
     fin.close();
 
     return commit;

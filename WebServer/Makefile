@@ -1,7 +1,8 @@
-SRC = $(wildcard src/*.cpp)
-SERVER_SRC = $(SRC) test/server.cpp ../gitlite/src/Utils.cpp
-CLIENT_SRC = $(SRC) test/client.cpp
-TEST_SRC = $(SRC) test/test.cpp
+WEBSERVER_SRC = $(wildcard src/*.cpp)
+GITLITE_SRC = $(wildcard ../gitlite/src/*.cpp)
+SERVER_SRC = $(WEBSERVER_SRC) test/server.cpp $(GITLITE_SRC)
+CLIENT_SRC = $(WEBSERVER_SRC) test/client.cpp $(GITLITE_SRC)
+TEST_SRC = $(WEBSERVER_SRC) test/test.cpp
 SERVER_OBJ = $(patsubst %.cpp, %.o, $(SERVER_SRC))
 CLIENT_OBJ = $(patsubst %.cpp, %.o, $(CLIENT_SRC))
 INCLUDE = -I./include -I../gitlite/include

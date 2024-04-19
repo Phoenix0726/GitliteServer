@@ -348,27 +348,6 @@ void Repository::merge(string branchName) {
 }
 
 // gitlite push
-// void Repository::push() {
-//     Client client;
-
-//     Commit curCommit = getCurCommit();
-//     ifstream commitFile(curCommit.getFile());
-
-//     client.send("file: " + curCommit.getId());
-//     client.sendfile(commitFile);
-//     commitFile.close();
-    
-//     unordered_map<string, string> blobs = curCommit.getBlobs();
-//     for (auto it : blobs) {
-//         string blobId = it.second;
-//         Blob blob = getBlobById(blobId);
-//         ifstream blobFile(blob.getFile());
-
-//         client.send("file: " + blobId);
-//         client.sendfile(blobFile);
-//         blobFile.close();
-//     }
-// }
 void Repository::push() {
     string username = getUsername();
     if (username == "") {
@@ -391,15 +370,22 @@ void Repository::push() {
                 fileq.push(join(file, it));
             }
         } else {    // 发送文件
-            client.sendfile(getRelativePath(GITLITE_DIR, file));
+            client.sendfile(getRelativePath(CWD, file));
         }
     }
 }
 
 // gitlite clone
 void Repository::clone() {
+    string username = getUsername();
+    if (username == "") {
+        printf("please set ther username first!");
+        return;
+    }
+
     Client client;
 
+    client.send("username: " + username);
     client.receive();
 
     // 根据 .gitlite 读出当前 commit 源文件
@@ -407,12 +393,12 @@ void Repository::clone() {
     unordered_map<string, string> blobs = curCommit.getBlobs();
     for (auto it : blobs) {
         string blobId = it.second;
-        printf("blobId: %s\n", blobId.c_str());
         Blob blob = getBlobById(blobId);
         blob.writeContentToSource();
     }
 }
 
+// gitlite set username [username]
 void Repository::set(string username) {
     ofstream fout(USER);
     fout << username;

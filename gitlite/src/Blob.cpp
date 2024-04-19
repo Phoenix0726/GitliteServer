@@ -42,8 +42,8 @@ void Blob::save() {
     ofstream fout(blobFile);
     fout << "BLOB\n";
     fout << id + '\n';
-    fout << srcFile + '\n';
-    fout << blobFile + '\n';
+    fout << getRelativePath(Repository::CWD, srcFile) + '\n';
+    fout << getRelativePath(Repository::CWD, blobFile) + '\n';
     for (auto line : content) {
         fout << line << '\n';
     }
@@ -76,6 +76,7 @@ Blob Blob::readObject(string blobFile) {
 
     string srcFile;
     getline(fin, srcFile);
+    srcFile = join(Repository::CWD, srcFile);
 
     getline(fin, line);
     

@@ -121,7 +121,7 @@ string getRelativePath(string dir, string path) {   // 获取文件在 dir 下�
             exit(1);
         }
     }
-    return path.substr(n);
+    return path.substr(n + 1);
 }
 
 void mkdirOfPath(string path) {
