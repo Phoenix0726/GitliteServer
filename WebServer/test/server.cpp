@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include <cstdio>
+#include <unistd.h>
 
 using std::string;
 using std::cout;
@@ -48,6 +49,8 @@ int main()
 
 
 void handle_request(Connection* conn) {
+    const string CWD = "../htdc";
+
     if (conn->get_state() == Connection::State::closed) {
         conn->fout.rdbuf((std::cout).rdbuf());
         conn->_close();
@@ -55,6 +58,17 @@ void handle_request(Connection* conn) {
     }
     
     string str(conn->read_buffer_val());
+
+    if (str.substr(0, 9) == "username:") {
+        conn->username = str.substr(10);
+        // 如果用户目录不存在，给该用户创建一个目录
+        string dir = join(CWD, conn->username);
+        if (access(dir.c_str(), 0) == -1) {
+            mkdir(dir.c_str(), S_IRWXU);
+        }
+        conn->_send("received");
+        return;
+    }
 
     if (str == "clone") {
         vector<string> fileList = plainFilenamesIn("../htdc/objects");
@@ -97,7 +111,10 @@ void handle_request(Connection* conn) {
     
     if (str.substr(0, 5) == "file:") {      // 收到文件名，把输出重定向到文件
         const string filename = str.substr(6);
-        conn->file.open("../htdc/objects/" + filename);
+        string save_path = join(join(CWD, conn->username), filename);
+        mkdirOfPath(save_path);     // 如果父文件夹不存在，先创建文件夹
+
+        conn->file.open(save_path);
         conn->fout.rdbuf(conn->file.rdbuf());
 
         conn->_send("received");

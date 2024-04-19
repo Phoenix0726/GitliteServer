@@ -115,6 +115,11 @@ int main(int argc, char** argv) {
         Repository::checkIfInitialized();
         validateArgsNum(argc, 2);
         Repository::clone();
+    } else if (op == "set") {
+        Repository::checkIfInitialized();
+        validateArgsNum(argc, 4);
+        string username = argv[3];
+        Repository::set(username);
     } else {
         cout << "No command with that name exists." << endl;
     }

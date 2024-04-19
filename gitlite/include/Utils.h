@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <sys/stat.h>
 
 using std::string;
 using std::vector;
@@ -29,8 +30,14 @@ string readContentsAsString(string file);
 
 vector<string> plainFilenamesIn(string dir);
 
+bool isDir(string dir);
+
 bool startsWith(const string& str, const string& head);
 
 string getFileName(string file);
+
+string getRelativePath(string dir, string path);
+
+void mkdirOfPath(string path);
 
 #endif

@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <cstring>
+#include <unistd.h>
 
 using std::ifstream;
 using std::ofstream;
@@ -88,6 +89,11 @@ vector<string> plainFilenamesIn(string dir) {
     return files;
 }
 
+bool isDir(string dir) {
+    struct stat buffer;
+    return (stat (dir.c_str(), &buffer) == 0 && S_ISDIR(buffer.st_mode));
+}
+
 bool startsWith(const string& str, const string& head) {
     return str.compare(0, head.size(), head) == 0;
 }
@@ -101,4 +107,28 @@ string getFileName(string file) {
         name = file[i] + name;
     }
     return name;
+}
+
+string getRelativePath(string dir, string path) {   // 获取文件在 dir 下的相对位置
+    int n = dir.size();
+    if (path.size() < n) {
+        std::cout << path << " is not a file in dir " << dir << std::endl;
+        exit(1);
+    }
+    for (int i = 0; i < n; i++) {
+        if (dir[i] != path[i]) {
+            std::cout << path << " is not a file in dir " << dir << std::endl;
+            exit(1);
+        }
+    }
+    return path.substr(n);
+}
+
+void mkdirOfPath(string path) {
+    string fpath = getParentFile(path);
+    if (fpath == "") return;
+    if (getParentFile(fpath) != "") mkdirOfPath(fpath);
+    if (access(fpath.c_str(), 0) == -1) {
+        mkdir(fpath.c_str(), S_IRWXU);
+    }
 }

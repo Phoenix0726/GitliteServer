@@ -348,25 +348,51 @@ void Repository::merge(string branchName) {
 }
 
 // gitlite push
+// void Repository::push() {
+//     Client client;
+
+//     Commit curCommit = getCurCommit();
+//     ifstream commitFile(curCommit.getFile());
+
+//     client.send("file: " + curCommit.getId());
+//     client.sendfile(commitFile);
+//     commitFile.close();
+    
+//     unordered_map<string, string> blobs = curCommit.getBlobs();
+//     for (auto it : blobs) {
+//         string blobId = it.second;
+//         Blob blob = getBlobById(blobId);
+//         ifstream blobFile(blob.getFile());
+
+//         client.send("file: " + blobId);
+//         client.sendfile(blobFile);
+//         blobFile.close();
+//     }
+// }
 void Repository::push() {
+    string username = getUsername();
+    if (username == "") {
+        printf("please set ther username first!");
+        return;
+    }
+
     Client client;
 
-    Commit curCommit = getCurCommit();
-    ifstream commitFile(curCommit.getFile());
+    client.send("username: " + username);
 
-    client.send("file: " + curCommit.getId());
-    client.sendfile(commitFile);
-    commitFile.close();
-    
-    unordered_map<string, string> blobs = curCommit.getBlobs();
-    for (auto it : blobs) {
-        string blobId = it.second;
-        Blob blob = getBlobById(blobId);
-        ifstream blobFile(blob.getFile());
-
-        client.send("file: " + blobId);
-        client.sendfile(blobFile);
-        blobFile.close();
+    queue<string> fileq;
+    fileq.push(GITLITE_DIR);
+    while (!fileq.empty()) {
+        string file = fileq.front();
+        fileq.pop();
+        if (isDir(file)) {  // 如果是文件夹，继续展开
+            vector<string> files = plainFilenamesIn(file);
+            for (auto it : files) {
+                fileq.push(join(file, it));
+            }
+        } else {    // 发送文件
+            client.sendfile(getRelativePath(GITLITE_DIR, file));
+        }
     }
 }
 

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <cstdio>
 #include <iostream>
+#include <fstream>
 
 #include "Client.h"
 #include "util.h"
@@ -12,6 +13,7 @@
 #include "Buffer.h"
 
 using std::endl;
+using std::ifstream;
 
 #define BUFFER_SIZE 1024
 
@@ -57,7 +59,9 @@ void Client::send(string str) {
     }
 }
 
-void Client::sendfile(istream& fin) {
+void Client::sendfile(string file) {
+    send("file: " + file);
+    ifstream fin(file);
     while (true) {
         send_buffer->getline(fin);      // 按行读取文件
         if (send_buffer->size() == 0) {     // 文件读完了

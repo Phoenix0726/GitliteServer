@@ -4,10 +4,12 @@
 #include <functional>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using std::ostream;
 using std::ofstream;
 using std::cout;
+using std::string;
 
 
 class EventLoop;
@@ -43,6 +45,7 @@ private:
 public:
     ostream& fout = std::cout;
     ofstream file;
+    string username = "";
 
     Connection(EventLoop* loop, Socket* sock);
     ~Connection();

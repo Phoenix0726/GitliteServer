@@ -26,7 +26,7 @@ public:
     Client();
     ~Client();
     void send(string str="");
-    void sendfile(istream& fin=std::cin);
+    void sendfile(string file);
     void receive();
 };
 
