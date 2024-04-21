@@ -1,0 +1,17 @@
+{% load static %}
+
+<head>
+    <link rel="stylesheet" href="https://cdn.acwing.com/static/jquery-ui-dist/jquery-ui.min.css">
+    <script src="https://cdn.acwing.com/static/jquery/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div id="container"></div>
+    <script type="module">
+        import {Gitlitehub} from "{% static 'js/dist/gitlitehub.js' %}"
+        $(document).ready(function() {
+            let gitlitehub = new Gitlitehub("container");
+        });
+    </script>
+</body>

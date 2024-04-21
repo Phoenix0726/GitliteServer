@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    width: 100%;
+}
+
+.file-region {
+    width: 70%;
+    top: 20%;
+    margin: auto;
+}
+
+.file-item {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+.file-content {
+    width: 100%;
+    white-space: pre-wrap;
+    border: 1px solid #ddd;
+}
