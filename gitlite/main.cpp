@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
         Repository::checkIfInitialized();
         switch (argc) {
             case 4: {
-                if (!strcmp(argv[2], "--")) {
+                if (strcmp(argv[2], "--")) {
                     cout << "Incorrect operands." << endl;
                     exit(1);
                 }
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
                 break;
             }
             case 5: {
-                if (!strcmp(argv[3], "--")) {
+                if (strcmp(argv[3], "--")) {
                     cout << "Incorrect operands." << endl;
                     exit(1);
                 }
@@ -78,8 +78,13 @@ int main(int argc, char** argv) {
                 break;
             }
             case 3: {
-                string branchName = argv[2];
-                Repository::checkoutBranch(branchName);
+                if (strlen(argv[2]) == 40) {
+                    string commitId = argv[2];
+                    Repository::checkoutCommit(commitId);
+                } else {
+                    string branchName = argv[2];
+                    Repository::checkoutBranch(branchName);
+                }
                 break;
             }
             default: {

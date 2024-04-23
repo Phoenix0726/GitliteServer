@@ -4,13 +4,15 @@
 }
 
 #container {
+    position: absolute;
     width: 100%;
 }
 
 .file-region {
+    display: block;
+    position: relative;
     width: 70%;
-    top: 20%;
-    margin: auto;
+    margin: 5% auto;
 }
 
 .file-item {

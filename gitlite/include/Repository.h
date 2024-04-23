@@ -51,6 +51,7 @@ public:
     static void status();       // gitlite status
     static void checkout(string file);      // gitlite checkout -- [file name]
     static void checkout(string commitId, string file);     // gitlite checkout [commit id] -- [file name]
+    static void checkoutCommit(string commitId);        // gitlite checkout [commit id]
     static void checkoutBranch(string branchName);      // gitlite checkout [branch name]
     static void createBranch(string branchName);        // gitlite branch [branch name]
     static void removeBranch(string branchName);        // gitlite rm-branch branchName

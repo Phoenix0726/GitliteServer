@@ -172,6 +172,17 @@ void Repository::checkout(string commitId, string fileName) {
     }
 }
 
+// gitlite checkout [commit id]
+void Repository::checkoutCommit(string commitId) {
+    Commit commit = getCommitById(commitId);
+    unordered_map<string, string> blobs = commit.getBlobs();
+    for (auto it : blobs) {
+        string blobId = it.second;
+        Blob blob = getBlobById(blobId);
+        blob.writeContentToSource();
+    }
+}
+
 // gitlite checkout [branch name]
 void Repository::checkoutBranch(string branchName) {
     string curBranch = readContentsAsString(HEAD);
@@ -192,6 +203,9 @@ void Repository::checkoutBranch(string branchName) {
 
 // gitlite branch [branch name]
 void Repository::createBranch(string branchName) {
+    if (branchName.size() >= 40) {
+        Exit("Branch name length can't be greater than or equal to 48.");
+    }
     vector<string> branchList = plainFilenamesIn(HEADS_DIR);
     if (std::count(branchList.begin(), branchList.end(), branchName)) {
         Exit("A branch with that name already exists.");

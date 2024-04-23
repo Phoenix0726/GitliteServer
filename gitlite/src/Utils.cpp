@@ -30,6 +30,8 @@ void writeContents(string file, string line) {
 }
 
 void writeContents(string file, vector<string> content) {
+    mkdirOfPath(file);
+    
     ofstream fout(file);
     for (auto line : content) {
         fout << line + '\n';

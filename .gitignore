@@ -1,3 +1,8 @@
 *.o
 *.swp
 **/__pycache__
+*.gitlite
+*.txt
+*htdc
+*bin
+gitlite/gitlite

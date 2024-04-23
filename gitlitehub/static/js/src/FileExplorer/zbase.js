@@ -7,7 +7,8 @@ class FileExplorer {
         `);
         this.root.$gitlitehub.append(this.$fileExplorer);
 
-        this.path = "./";
+        this.project = "long";
+        this.path = "long";
 
         this.start();
     }
@@ -16,6 +17,65 @@ class FileExplorer {
         this.get_filelist();
 
         this.add_listening_events();
+
+        $.ajax({
+            url: "get_branches/",
+            type: "GET",
+            async: false,
+            data: {
+                project: this.project,
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    console.log();
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
+
+        this.commit = '';
+        $.ajax({
+            url: "get_commit/",
+            type: "GET",
+            async: false,
+            data: {
+                project: this.project,
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    console.log(resp.commit_list);
+                    this.commit = JSON.parse(JSON.stringify(resp.commit_list[0]));
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
+
+        $.ajax({
+            url: "checkout_commit/",
+            type: "GET",
+            async: false,
+            data: {
+                project: this.project,
+                commit: this.commit,
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
     }
 
     add_listening_events() {
