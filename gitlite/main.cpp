@@ -94,9 +94,21 @@ int main(int argc, char** argv) {
         }
     } else if (op == "branch") {
         Repository::checkIfInitialized();
-        validateArgsNum(argc, 3);
-        string branchName = argv[2];
-        Repository::createBranch(branchName);
+        switch (argc) {
+            case 2: {
+                Repository::showBranch();
+                break;
+            }
+            case 3: {
+                string branchName = argv[2];
+                Repository::createBranch(branchName);
+                break;
+            }
+            default: {
+                cout << "Incorrect operands." << endl;
+                exit(1);
+            }
+        }       
     } else if (op == "rm-branch") {
         Repository::checkIfInitialized();
         validateArgsNum(argc, 3);

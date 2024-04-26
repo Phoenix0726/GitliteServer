@@ -16,15 +16,31 @@ def get_branches(request):
             'result': "The project doesn't exist",
         })
     
-    branches_dir = os.path.join(project_dir, '.gitlite/refs/heads')
-    branches = os.listdir(branches_dir)
+    args = ['branch']
+    output = subprocess.run([gitlite] + args, cwd=project_dir,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if output.stderr:
+        print(output.stderr)
+        return JsonResponse({
+            'result': output.stderr,
+        })
+    
+    branches = []
+    cur_branch = ''
+    for str in output.stdout.strip().split('\n'):
+        if str[0] == '*':
+            str = str[1:]
+            cur_branch = str
+        branches.append(str)
+
     return JsonResponse({
         'result': "success",
         'branches': branches,
+        'cur_branch': cur_branch,
     })
 
 
-def get_commit(request):
+def get_commits(request):
     project_dir = request.GET.get('project')
     project_dir = os.path.join(base_dir, project_dir)
     if not os.path.exists(project_dir):
@@ -37,15 +53,25 @@ def get_commit(request):
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if output.stderr:
         print(output.stderr)
-
-    commit_list = []
-    for str in output.stdout.split('\n'):
-        if str.startswith("commit"):
-            commit_list.append(str[7:])
+        return JsonResponse({
+            'result': output.stderr,
+        })
+    
+    commits = []
+    commits_msg = {}
+    for str in output.stdout.split('==='):
+        commit = None
+        for line in str.split('\n'):
+            if line.startswith('commit'):
+                commit = line[7:]
+                commits.append(commit)
+        if commit:
+            commits_msg[commit] = str.strip()
 
     return JsonResponse({
         'result': "success",
-        'commit_list': commit_list,
+        'commits': commits,
+        'commits_msg': commits_msg,
     })
 
 
@@ -67,6 +93,29 @@ def clear_project(project_dir):
         if filename != ".gitlite":
             filepath = os.path.join(project_dir, filename)
             delete_path(filepath)
+
+
+def checkout_branch(request):
+    project_dir = request.GET.get('project')
+    project_dir = os.path.join(base_dir, project_dir)
+    if not os.path.exists(project_dir):
+        return JsonResponse({
+            'result': "The project doesn't exist",
+        })
+    
+    branch = request.GET.get('branch')
+    args = ['checkout', branch]
+    output = subprocess.run([gitlite] + args, cwd=project_dir,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if output.stderr:
+        print(output.stderr)
+        return JsonResponse({
+            'result': output.stderr,
+        })
+
+    return JsonResponse({
+        'result': "success",
+    })
 
 
 def checkout_commit(request):
@@ -91,6 +140,9 @@ def checkout_commit(request):
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if output.stderr:
         print(output.stderr)
+        return JsonResponse({
+            'result': output.stderr,
+        })
 
     return JsonResponse({
         'result': "success",
@@ -98,9 +150,15 @@ def checkout_commit(request):
 
 
 def get_filelist(request):
+    project_dir = request.GET.get('project')
+    project_dir = os.path.join(base_dir, project_dir)
+    if not os.path.exists(project_dir):
+        return JsonResponse({
+            'result': "The project doesn't exist",
+        })
+    
     path = request.GET.get('path')
     path = os.path.join(base_dir, path)
-    
     if not os.path.exists(path):
         return JsonResponse({
             'result': "The file path does not exist",
@@ -108,7 +166,9 @@ def get_filelist(request):
 
     filenames = os.listdir(path)
     filelist = {}
-    filelist['..'] = 'dir'
+    if path != project_dir:
+        filelist['..'] = 'dir'
+
     for filename in filenames:
         if filename == '.gitlite':
             continue

@@ -53,6 +53,7 @@ public:
     static void checkout(string commitId, string file);     // gitlite checkout [commit id] -- [file name]
     static void checkoutCommit(string commitId);        // gitlite checkout [commit id]
     static void checkoutBranch(string branchName);      // gitlite checkout [branch name]
+    static void showBranch();      // gitlite branch
     static void createBranch(string branchName);        // gitlite branch [branch name]
     static void removeBranch(string branchName);        // gitlite rm-branch branchName
     static void reset(string commitId);     // gitlite reset [commit]
@@ -62,8 +63,8 @@ public:
     static void set(string username);   // gitlite set username [username]
 
     static void checkIfInitialized();
-    static Commit getCurCommit();
 private:
+    static Commit getCurCommit();
     static string getUsername();
     static void setCurBranch(string branchName);
     static void initCommit();

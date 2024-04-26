@@ -53,7 +53,7 @@ string getParentFile(string file) {
 }
 
 void Exit(string msg) {
-    std::cout << msg << std::endl;
+    std::cerr << msg << std::endl;
     exit(1);
 }
 

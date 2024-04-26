@@ -8,17 +8,84 @@
     width: 100%;
 }
 
+.file-explorer {
+    position: relative;
+    width: 70%;
+    margin: 5% auto;
+}
+
+.select-menu {
+    position: relative;
+    width: 70%;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.select-menu-item {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.select-menu-branches {
+    float: left;
+}
+
+.select-menu-commits {
+    float: right;
+}
+
+.branch-list {
+    display: block;
+    position: relative;
+    width: 70%;
+    margin: auto;
+}
+
+.branch-list-item {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+.branch-list-item:hover {
+    background-color: #eee;
+}
+
+.commit-list {
+    display: block;
+    position: relative;
+    width: 70%;
+    margin: auto;
+}
+
+.commit-list-item {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    white-space: pre-wrap;
+}
+
+.commit-list-item:hover {
+    background-color: #eee;
+}
+
 .file-region {
     display: block;
     position: relative;
     width: 70%;
-    margin: 5% auto;
+    margin: auto;
 }
 
 .file-item {
     width: 100%;
     padding: 5px;
     border: 1px solid #ddd;
+}
+
+.file-item:hover {
+    background-color: #eee;
 }
 
 .file-content {

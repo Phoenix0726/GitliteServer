@@ -201,6 +201,18 @@ void Repository::checkoutBranch(string branchName) {
     setCurBranch(branchName);
 }
 
+// gitlite branch
+void Repository::showBranch() {
+    vector<string> branchList = plainFilenamesIn(HEADS_DIR);
+    string curBranch = readContentsAsString(HEAD);
+    cout << "*" << curBranch << endl;
+    for (string branch : branchList) {
+        if (branch != curBranch) {
+            cout << branch << endl;
+        }
+    }
+}
+
 // gitlite branch [branch name]
 void Repository::createBranch(string branchName) {
     if (branchName.size() >= 40) {
