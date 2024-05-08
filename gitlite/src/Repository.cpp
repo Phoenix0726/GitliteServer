@@ -4,7 +4,7 @@
 #include "Commit.h"
 #include "StageArea.h"
 
-#include "../../WebServer/include/Client.h"
+#include "../../Server/include/Client.h"
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -429,6 +429,31 @@ void Repository::set(string username) {
     ofstream fout(USER);
     fout << username;
     fout.close();
+}
+
+// gitlite --help
+void Repository::help() {
+    cout << "gitlite init" << endl;
+    cout << "gitlite add [file name]" << endl;
+    cout << "gitlite remove [file name]" << endl;
+    cout << "gitlite commit [msg]" << endl;
+    cout << "gitlite log" << endl;
+    cout << "gitlite global-log" << endl;
+    cout << "gitlite find [message]" << endl;
+    cout << "gitlite status" << endl;
+    cout << "gitlite checkout -- [file name]" << endl;
+    cout << "gitlite checkout [commit id] -- [file name]" << endl;
+    cout << "gitlite checkout [commit id]" << endl;
+    cout << "gitlite checkout [branch name]" << endl;
+    cout << "gitlite branch" << endl;
+    cout << "gitlite branch [branch name]" << endl;
+    cout << "gitlite rm-branch branchName" << endl;
+    cout << "gitlite reset [commit]" << endl;
+    cout << "gitlite merge [branch name]" << endl;
+    cout << "gitlite push" << endl;
+    cout << "gitlite clone" << endl;
+    cout << "gitlite set username [username]" << endl;
+    cout << "gitlite --help" << endl;
 }
 
 

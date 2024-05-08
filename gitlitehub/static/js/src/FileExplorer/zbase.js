@@ -32,7 +32,7 @@ class FileExplorer {
     start() {
         this.getBranches();
         this.getCommits();
-        // this.checkoutCommit(this.commits[0]);
+        this.checkoutCommit(this.commits[0]);
         this.getFilelist();
 
         this.addListeningEvents();        
@@ -56,7 +56,9 @@ class FileExplorer {
         this.$branchList.on('click', '.branch-list-item', function() {
             let branch = $(this).text();
             console.log(branch);
-            outer.checkoutBranch(branch);
+            if (branch[0] !== '*') {
+                outer.checkoutBranch(branch);
+            }
             outer.hide();
             outer.$fileRegion.show();
         });
@@ -70,7 +72,7 @@ class FileExplorer {
             outer.$fileRegion.show();
         });
 
-        this.$fileRegion.on('click', ".file-item", function() {
+        this.$fileRegion.on('click', ".file-item-name", function() {
             let filename = $(this).text();
             let filetype = outer.filelist[filename];
             if (filetype === "dir") {
@@ -118,7 +120,6 @@ class FileExplorer {
                 if (resp.result === "success") {
                     this.commits = JSON.parse(JSON.stringify(resp.commits));
                     this.commitsMsg = JSON.parse(JSON.stringify(resp.commits_msg));
-                    console.log(this.commits);
                     this.showCommits();
                 } else {
                     console.log(resp.result);
@@ -258,8 +259,12 @@ class FileExplorer {
 
         this.$fileRegion.find(".file-item").remove();
         for (let file in this.filelist) {
+            let icon = '📄';
+            if (this.filelist[file] === 'dir') icon = '📂';
             let $item = $(`
-                <div class="file-item">${file}</div>
+                <div class="file-item">
+                    ${icon}<span class="file-item-name">${file}</span>
+                </div>
             `);
             this.$fileRegion.append($item);
         }

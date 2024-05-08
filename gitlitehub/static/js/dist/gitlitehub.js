@@ -32,7 +32,7 @@ class FileExplorer {
     start() {
         this.getBranches();
         this.getCommits();
-        // this.checkoutCommit(this.commits[0]);
+        this.checkoutCommit(this.commits[0]);
         this.getFilelist();
 
         this.addListeningEvents();        
@@ -56,7 +56,9 @@ class FileExplorer {
         this.$branchList.on('click', '.branch-list-item', function() {
             let branch = $(this).text();
             console.log(branch);
-            outer.checkoutBranch(branch);
+            if (branch[0] !== '*') {
+                outer.checkoutBranch(branch);
+            }
             outer.hide();
             outer.$fileRegion.show();
         });
@@ -70,7 +72,7 @@ class FileExplorer {
             outer.$fileRegion.show();
         });
 
-        this.$fileRegion.on('click', ".file-item", function() {
+        this.$fileRegion.on('click', ".file-item-name", function() {
             let filename = $(this).text();
             let filetype = outer.filelist[filename];
             if (filetype === "dir") {
@@ -118,7 +120,6 @@ class FileExplorer {
                 if (resp.result === "success") {
                     this.commits = JSON.parse(JSON.stringify(resp.commits));
                     this.commitsMsg = JSON.parse(JSON.stringify(resp.commits_msg));
-                    console.log(this.commits);
                     this.showCommits();
                 } else {
                     console.log(resp.result);
@@ -258,9 +259,12 @@ class FileExplorer {
 
         this.$fileRegion.find(".file-item").remove();
         for (let file in this.filelist) {
-            // if (this.filelist[file] == 'dir') file += '/';
+            let icon = '📄';
+            if (this.filelist[file] === 'dir') icon = '📂';
             let $item = $(`
-                <div class="file-item">${file}</div>
+                <div class="file-item">
+                    ${icon}<span class="file-item-name">${file}</span>
+                </div>
             `);
             this.$fileRegion.append($item);
         }
@@ -280,11 +284,90 @@ class FileExplorer {
         this.$commitList.hide();
     }
 }
-export class Gitlitehub {
+class UserInfo {
+    constructor(root) {
+        this.root = root;
+
+        this.start();
+    }
+
+    start() {
+        // this.register();
+        // this.login();
+        this.getInfo();
+    }
+
+    register() {
+        $.ajax({
+            url: "register/",
+            type: "GET",
+            async: false,
+            data: {
+                username: 'test1',
+                password: '1234',
+                password_confirm: '1234',
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    console.log('register success');
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
+    }
+
+    login() {
+        $.ajax({
+            url: "login/",
+            type: "GET",
+            async: false,
+            data: {
+                username: 'test1',
+                password: '1234',
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    console.log('login success');
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
+    }
+
+    getInfo() {
+        $.ajax({
+            url: "get_info/",
+            type: "GET",
+            async: false,
+            data: {
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    console.log(resp);
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
+    }
+}export class Gitlitehub {
     constructor(id) {
         this.id = id;
         this.$gitlitehub = $('#' + id);
 
         this.fileExplorer = new FileExplorer(this);
+
+        this.userInfo = new UserInfo(this);
     }
 };

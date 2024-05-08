@@ -4,5 +4,7 @@ export class Gitlitehub {
         this.$gitlitehub = $('#' + id);
 
         this.fileExplorer = new FileExplorer(this);
+
+        this.userInfo = new UserInfo(this);
     }
 };

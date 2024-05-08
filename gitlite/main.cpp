@@ -137,6 +137,9 @@ int main(int argc, char** argv) {
         validateArgsNum(argc, 4);
         string username = argv[3];
         Repository::set(username);
+    } else if (op == "--help") {
+        validateArgsNum(argc, 2);
+        Repository::help();
     } else {
         cout << "No command with that name exists." << endl;
     }

@@ -41,26 +41,27 @@ public:
     static const string STAGE;
     static const string USER;
 
-    static void init();     // gitlite init
-    static void add(string fileName);   // gitlite add [file name]
-    static void remove(string fileName);    // gitlite remove [file name]
-    static void commit(string msg);     // gitlite commit [msg]
-    static void log();      // gitlite log
-    static void globalLog();    // gitlite global-log
-    static void find(string message);   // gitlite find [message]
-    static void status();       // gitlite status
-    static void checkout(string file);      // gitlite checkout -- [file name]
-    static void checkout(string commitId, string file);     // gitlite checkout [commit id] -- [file name]
+    static void init();                                 // gitlite init
+    static void add(string fileName);                   // gitlite add [file name]
+    static void remove(string fileName);                // gitlite remove [file name]
+    static void commit(string msg);                     // gitlite commit [msg]
+    static void log();                                  // gitlite log
+    static void globalLog();                            // gitlite global-log
+    static void find(string message);                   // gitlite find [message]
+    static void status();                               // gitlite status
+    static void checkout(string file);                  // gitlite checkout -- [file name]
+    static void checkout(string commitId, string file); // gitlite checkout [commit id] -- [file name]
     static void checkoutCommit(string commitId);        // gitlite checkout [commit id]
     static void checkoutBranch(string branchName);      // gitlite checkout [branch name]
-    static void showBranch();      // gitlite branch
+    static void showBranch();                           // gitlite branch
     static void createBranch(string branchName);        // gitlite branch [branch name]
     static void removeBranch(string branchName);        // gitlite rm-branch branchName
-    static void reset(string commitId);     // gitlite reset [commit]
-    static void merge(string branchName);   // gitlite merge [branch name]
-    static void push();     // gitlite push
-    static void clone();    // gitlite clone
-    static void set(string username);   // gitlite set username [username]
+    static void reset(string commitId);                 // gitlite reset [commit]
+    static void merge(string branchName);               // gitlite merge [branch name]
+    static void push();                                 // gitlite push
+    static void clone();                                // gitlite clone
+    static void set(string username);                   // gitlite set username [username]
+    static void help();                                 // gitlite --help
 
     static void checkIfInitialized();
 private:
