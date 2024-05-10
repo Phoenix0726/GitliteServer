@@ -3,11 +3,23 @@ class Menu {
         this.root = root;
         this.$menu = $(`
             <div class="menu">
+                <div class="top-navigation">
+                    <div class="nav-project-path">
+                        <img src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png"/>
+                        <span class="nav-project-path-username">${this.root.username}</span> / 
+                        <span class="nav-project-path-projectname">${this.root.project}</span>
+                    </div>
+                    <div class="nav-search-bar">
+                        <input type="text" value=" 🔍 "/>
+                    </div>
+                    <div class="nav-user-photo">
+                        <img src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png"/>
+                    </div>
+                </div>
                 <div class="menu-bar">
                     <div class="menu-item menu-code item-active">Code</div>
                     <div class="menu-item menu-projects">Projects</div>
                     <div class="menu-item menu-settings">Settings</div>
-                    <div class="menu-item menu-login">Login</div>
                     <div style="clear: both;"></div>
                 </div>
             </div>
@@ -109,7 +121,9 @@ class Menu {
             },
             success: resp => {
                 if (resp.result === "success") {
-                    // console.log(resp);
+                    this.photo = JSON.parse(JSON.stringify(resp.photo));
+                    let $navUserPhoto = this.$menu.find('.nav-user-photo img');
+                    $navUserPhoto.attr('src', this.photo);
                 } else {
                     console.log(resp.result);
                 }

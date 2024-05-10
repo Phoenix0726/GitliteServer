@@ -301,11 +301,23 @@ class Menu {
         this.root = root;
         this.$menu = $(`
             <div class="menu">
+                <div class="top-navigation">
+                    <div class="nav-project-path">
+                        <img src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png"/>
+                        <span class="nav-project-path-username">${this.root.username}</span> / 
+                        <span class="nav-project-path-projectname">${this.root.project}</span>
+                    </div>
+                    <div class="nav-search-bar">
+                        <input type="text" value=" 🔍 "/>
+                    </div>
+                    <div class="nav-user-photo">
+                        <img src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png"/>
+                    </div>
+                </div>
                 <div class="menu-bar">
                     <div class="menu-item menu-code item-active">Code</div>
                     <div class="menu-item menu-projects">Projects</div>
                     <div class="menu-item menu-settings">Settings</div>
-                    <div class="menu-item menu-login">Login</div>
                     <div style="clear: both;"></div>
                 </div>
             </div>
@@ -407,7 +419,9 @@ class Menu {
             },
             success: resp => {
                 if (resp.result === "success") {
-                    // console.log(resp);
+                    this.photo = JSON.parse(JSON.stringify(resp.photo));
+                    let $navUserPhoto = this.$menu.find('.nav-user-photo img');
+                    $navUserPhoto.attr('src', this.photo);
                 } else {
                     console.log(resp.result);
                 }
@@ -457,10 +471,12 @@ class Menu {
 
     start() {
         this.add_listening_events();
-        this.getPorjects();
+        this.getProjects();
     }
 
     add_listening_events() {
+        let outer = this;
+
         let menuList = this.$projectExplorer.find('.pe-select-menu-item');
         for (let i = 0; i < menuList.length; i++) {
             $(menuList[i]).click(function() {
@@ -477,6 +493,51 @@ class Menu {
             this.hide();
             this.$newProject.show();
         });
+
+        this.$projectList.on('click', ".project-list-item-name", function() {
+            let name = $(this).text();
+            let url = "http://127.0.0.1:8000/" + outer.root.username + "/" + name;
+            $(location).attr('href', url);
+        });
+
+        this.$projectList.on('click', ".project-list-item-delete", function() {
+            let name = $(this).siblings('.project-list-item-name').text();
+            let owner = outer.root.username;
+            $.confirm({
+                title: 'Delete Project: ' + name,
+                content: '' +
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>Please enter the project name to confirm deleting the project </label>' +
+                '<input type="text" placeholder="Project name" class="name form-control" required />' +
+                '</div>' +
+                '</form>',
+                buttons: {
+                    formSubmit: {          
+                        text: 'Confirm',           
+                        btnClass: 'btn-red',            
+                        action: function () {           
+                            let text = this.$content.find('.name').val();           
+                            if(text !== name){    
+                                $.alert('Error project name');     
+                                return false;         
+                            }
+                            outer.deleteProject(name, owner);
+                        }
+                    },          
+                    cancel: function () {  
+                        //close
+                    },
+                },
+            });
+        })
+
+        this.$newProject.find('.new-project-submit').click(() => {
+            let owner = this.root.username;
+            let name = this.$newProject.find('.new-project-name input').val();
+            let description = this.$newProject.find('.new-project-description input').val();
+            this.createProject(name, owner, description);
+        });
     }
 
     hide() {
@@ -484,7 +545,7 @@ class Menu {
         this.$newProject.hide();
     }
 
-    getPorjects() {
+    getProjects() {
         $.ajax({
             url: "get_projects/",
             type: "GET",
@@ -506,12 +567,67 @@ class Menu {
     }
 
     showProjects() {
+        this.$projectList.find('.project-list-item').remove();
         for (let i in this.projects) {
+            let project = this.projects[i];
             let $item = $(`
-                <div class="project-list-item">${this.projects[i]}</div>
+                <div class="project-list-item">
+                    <div class="project-list-item-name">${project.name}</div>
+                    <div class="project-list-item-description">${project.description}</div>
+                    <div class="project-list-item-stars">⭐ ${project.stars}</div>
+                    <div class="project-list-item-delete">🗑</div>
+                </div>
             `);
             this.$projectList.append($item);
         }
+    }
+
+    createProject(name, owner, description) {
+        $.ajax({
+            url: "create_project/",
+            type: "GET",
+            async: false,
+            data: {
+                'name': name,
+                'owner': owner,
+                'description': description,
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    url = "http://127.0.0.1/" + owner + "/" + name;
+                    $(location).attr('href', url);
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
+    }
+
+    deleteProject(name, owner) {
+        $.ajax({
+            url: "delete_project/",
+            type: "GET",
+            async: false,
+            data: {
+                'name': name,
+                'owner': owner,
+            },
+            success: resp => {
+                if (resp.result === "success") {
+                    this.getProjects();
+                    this.hide();
+                    this.$projectList.show();
+                } else {
+                    console.log(resp.result);
+                }
+            },
+            error: e => {
+                console.log(e);
+            },
+        });
     }
 }export class Gitlitehub {
     constructor(id, username, project) {

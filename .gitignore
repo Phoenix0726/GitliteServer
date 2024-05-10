@@ -7,4 +7,5 @@
 *bin
 gitlite/gitlite
 .vscode
-gitlitehub/static/js/dist/
+gitlitehub/static/js/dist/gitlitehub.js
+

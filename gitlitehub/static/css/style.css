@@ -13,9 +13,86 @@
     position: relative;
     width: 100%;
     margin: auto;
-    padding-top: 5%;
     padding-bottom: 10px;
     background-color: #f6f8fa;
+}
+
+.top-navigation {
+    display: block;
+    position: relative;
+    width: 95%;
+    height: 5%;
+    margin: auto;
+    padding-top: 2vh;
+    padding-bottom: 1vh;
+}
+
+.nav-project-path {
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    width: 30%;
+}
+
+.nav-project-path > img {
+    display: inline-block;
+    position: relative;
+    height: 30px;
+    width: 30px;
+    border: 1px solid white;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.nav-project-path > span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 30px;
+    padding: 0 2px;
+    cursor: pointer;
+}
+
+.nav-project-path > span:hover {
+    background-color: #eee;
+}
+
+.nav-search-bar {
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    width: 40%;
+    text-align: center;
+}
+
+.nav-search-bar > input {
+    width: 80%;
+    height: 30px;
+    border: 1px solid #d0d7de;
+    border-radius: 5px;
+}
+
+.nav-user-photo {
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    width: 29%;
+    text-align: right;
+}
+
+.nav-user-photo > img {
+    display: inline-block;
+    position: relative;
+    height: 30px;
+    width: 30px;
+    border: 1px solid #1f232826;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .menu-bar {
@@ -37,10 +114,6 @@
 .menu-item:hover {
     background-color: #ddd;
     cursor: pointer;
-}
-
-.menu-login {
-    float: right;
 }
 /* Menu region end */
 
@@ -190,12 +263,37 @@
 .project-list-item {
     width: 100%;
     padding: 7px;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     box-sizing: border-box;
 }
 
-.project-list-item:hover {
-    background-color: #eee;
+.project-list-item-name {
+    font-size: 25px;
+    color: #0969da;
+    cursor: pointer;
+}
+
+.project-list-item-name:hover {
+    text-decoration: underline;
+}
+
+.project-list-item-description {
+    color: #636c76;
+    padding: 0 2px;
+}
+
+.project-list-item-stars {
+    color: #636c76;
+    padding: 0 2px;
+}
+
+.project-list-item-delete {
+    position: relative;
+    float: right;
+    font-size: 40px;
+    bottom: 60px;
+    color: red;
+    cursor: pointer;
 }
 
 .new-project {
@@ -226,6 +324,7 @@
     color: white;
     background-color: #1f883d;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 /* Project explorer region end */

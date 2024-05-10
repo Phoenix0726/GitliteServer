@@ -22,7 +22,7 @@ from gitlitehub.views.files_info import get_filelist, get_file_content, get_bran
 
 from gitlitehub.views.users_info import register, login, get_info
 
-from gitlitehub.views.projects_info import get_projects
+from gitlitehub.views.projects_info import get_projects, create_project, delete_project
 
 
 urlpatterns = [
@@ -42,6 +42,10 @@ urlpatterns = [
     path("<str:username>/<str:project>/get_info/", get_info, name="get_info"),
     path("<str:username>/get_projects/", get_projects, name="get_projects"),
     path("<str:username>/<str:project>/get_projects/", get_projects, name="get_projects"),
+    path("<str:username>/create_project/", create_project, name="create_project"),
+    path("<str:username>/<str:project>/create_project/", create_project, name="create_project"),
+    path("<str:username>/delete_project/", delete_project, name="delete_project"),
+    path("<str:username>/<str:project>/delete_project/", delete_project, name="delete_project"),
 
     path("<str:username>/", user, name="user"),
     path("<str:username>/<str:project>/", project, name="project"),
