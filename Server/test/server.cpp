@@ -71,10 +71,25 @@ void handle_request(Connection* conn) {
         conn->_send("received");
         return;
     }
+    if (str.substr(0, 8) == "project:") {
+        conn->project = str.substr(9);
+        // 如果项目目录不存在，给该项目创建一个目录
+        if (conn->username == "") {
+            Exit("User is not exists!");
+        }
+        string dir = join(CWD, join(conn->username, conn->project));
+        if (access(dir.c_str(), 0) == -1) {
+            mkdir(dir.c_str(), S_IRWXU);
+        }
+        conn->_send("received");
+        return;
+    }
 
     /* clone start */
-    if (str == "clone") {
-        string dir_path = join(CWD, conn->username);
+    if (str.substr(0, 6) == "clone:") {
+        string dir_path = str.substr(7);
+        dir_path = join(CWD, dir_path);
+        printf("clone project path: %s\n", dir_path.c_str());
         queue<string> fileq;
         fileq.push(dir_path);
         while (!fileq.empty()) {
@@ -86,7 +101,7 @@ void handle_request(Connection* conn) {
                     fileq.push(join(file, it));
                 }
             } else {    // 发送文件
-                ifstream fin(join(CWD, file));
+                ifstream fin(file);
                 string line = "file: " + getRelativePath(dir_path, file);
                 while (true) {
                     if (line == "") getline(fin, line);
@@ -122,10 +137,11 @@ void handle_request(Connection* conn) {
         return;
     }
     /* clone end */
-    
+
     if (str.substr(0, 5) == "file:") {      // 收到文件名，把输出重定向到文件
         const string filename = str.substr(6);
-        string save_path = join(join(CWD, conn->username), filename);
+        string save_path = join(join(join(CWD, conn->username), conn->project), filename);
+        printf("file save path: %s\n", save_path.c_str());
         mkdirOfPath(save_path);     // 如果父文件夹不存在，先创建文件夹
 
         conn->file.open(save_path);

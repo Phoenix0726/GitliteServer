@@ -7,9 +7,8 @@ from .setttings import base_dir
 from .setttings import gitlite
 
 
-def get_branches(request):
-    project_dir = request.GET.get('project')
-    project_dir = os.path.join(base_dir, project_dir)
+def get_branches(request, username=None, project=None):
+    project_dir = os.path.join(base_dir, username, project)
 
     if not os.path.exists(project_dir):
         return JsonResponse({
@@ -40,9 +39,9 @@ def get_branches(request):
     })
 
 
-def get_commits(request):
-    project_dir = request.GET.get('project')
-    project_dir = os.path.join(base_dir, project_dir)
+def get_commits(request, username=None, project=None):
+    project_dir = os.path.join(base_dir, username, project)
+
     if not os.path.exists(project_dir):
         return JsonResponse({
             'result': "The project doesn't exist",
@@ -95,9 +94,9 @@ def clear_project(project_dir):
             delete_path(filepath)
 
 
-def checkout_branch(request):
-    project_dir = request.GET.get('project')
-    project_dir = os.path.join(base_dir, project_dir)
+def checkout_branch(request, username=None, project=None):
+    project_dir = os.path.join(base_dir, username, project)
+
     if not os.path.exists(project_dir):
         return JsonResponse({
             'result': "The project doesn't exist",
@@ -118,9 +117,9 @@ def checkout_branch(request):
     })
 
 
-def checkout_commit(request):
-    project_dir = request.GET.get('project')
-    project_dir = os.path.join(base_dir, project_dir)
+def checkout_commit(request, username=None, project=None):
+    project_dir = os.path.join(base_dir, username, project)
+
     if not os.path.exists(project_dir):
         return JsonResponse({
             'result': "The project doesn't exist",
@@ -149,9 +148,9 @@ def checkout_commit(request):
     })
 
 
-def get_filelist(request):
-    project_dir = request.GET.get('project')
-    project_dir = os.path.join(base_dir, project_dir)
+def get_filelist(request, username=None, project=None):
+    project_dir = os.path.join(base_dir, username, project)
+
     if not os.path.exists(project_dir):
         return JsonResponse({
             'result': "The project doesn't exist",
@@ -181,7 +180,7 @@ def get_filelist(request):
     })
 
 
-def get_file_content(request):
+def get_file_content(request, username=None, project=None):
     path = request.GET.get('path')
     path = os.path.join(base_dir, path)
 

@@ -1,11 +1,11 @@
 TAR = gitlite
 GITLITE_SRC = main.cpp $(wildcard src/*.cpp)
-WEBSERVER_SRC =  $(wildcard ../WebServer/src/*.cpp)
+WEBSERVER_SRC =  $(wildcard ../Server/src/*.cpp)
 GITLITE_OBJ = $(patsubst %.cpp, %.o, $(GITLITE_SRC))
 WEBSERVER_OBJ = $(patsubst %.cpp, %.o, $(WEBSERVER_SRC))
 SRC = $(GITLITE_SRC) $(WEBSERVER_SRC)
 OBJ = $(GITLITE_OBJ) $(WEBSERVER_OBJ)
-INCLUDE = -I./include -I../WebServer/include
+INCLUDE = -I./include -I../Server/include
 CFLAGS = -std=c++17
 
 $(TAR): $(OBJ)

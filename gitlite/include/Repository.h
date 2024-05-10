@@ -59,13 +59,13 @@ public:
     static void reset(string commitId);                 // gitlite reset [commit]
     static void merge(string branchName);               // gitlite merge [branch name]
     static void push();                                 // gitlite push
-    static void clone();                                // gitlite clone
+    static void clone(string path);                     // gitlite clone
     static void set(string username);                   // gitlite set username [username]
     static void help();                                 // gitlite --help
 
     static void checkIfInitialized();
-private:
     static Commit getCurCommit();
+private:
     static string getUsername();
     static void setCurBranch(string branchName);
     static void initCommit();

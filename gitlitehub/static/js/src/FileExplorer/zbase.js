@@ -3,9 +3,10 @@ class FileExplorer {
         this.root = root;
         this.$fileExplorer = $(`
             <div class="file-explorer">
-                <div class="select-menu">
-                    <div class="select-menu-item select-menu-branches">branches</div>
-                    <div class="select-menu-item select-menu-commits">commits</div>
+                <div class="fe-select-menu">
+                    <div class="fe-select-menu-item fe-select-menu-files item-active">Files</div>
+                    <div class="fe-select-menu-item fe-select-menu-branches">Branches</div>
+                    <div class="fe-select-menu-item fe-select-menu-commits">Commits</div>
                     <div style="clear: both;"></div>
                 </div>
                 <div class="branch-list"></div>
@@ -13,9 +14,10 @@ class FileExplorer {
                 <div class="file-region"></div>
             </div>
         `);
+        this.$files = this.$fileExplorer.find('.fe-select-menu-files');
+        this.$branches = this.$fileExplorer.find('.fe-select-menu-branches');
+        this.$commits = this.$fileExplorer.find('.fe-select-menu-commits');
         this.$fileRegion = this.$fileExplorer.find('.file-region');
-        this.$branches = this.$fileExplorer.find('.select-menu-branches');
-        this.$commits = this.$fileExplorer.find('.select-menu-commits');
         this.$branchList = this.$fileExplorer.find('.branch-list');
         this.$branchList.hide();
         this.$commitList = this.$fileExplorer.find('.commit-list');
@@ -23,8 +25,8 @@ class FileExplorer {
 
         this.root.$gitlitehub.append(this.$fileExplorer);
 
-        this.project = "long";
-        this.path = "long";
+        this.project = this.root.project;
+        this.path = this.root.username + '/' + this.project;
 
         this.start();
     }
@@ -41,14 +43,24 @@ class FileExplorer {
     addListeningEvents() {
         let outer = this;
 
+        let menuList = this.$fileExplorer.find('.fe-select-menu-item');
+        for (let i = 0; i < menuList.length; i++) {
+            $(menuList[i]).click(function() {
+                $(this).addClass('item-active').siblings().removeClass('item-active');
+            });
+        }
+
+        this.$files.click(() => {
+            this.hide();
+            this.$fileRegion.show();
+        });
+
         this.$branches.click(() => {
-            console.log(this.branches);
             this.hide();
             this.$branchList.show();
         });
 
         this.$commits.click(() => {
-            console.log(this.commits);
             this.hide();
             this.$commitList.show();
         });
@@ -263,7 +275,7 @@ class FileExplorer {
             if (this.filelist[file] === 'dir') icon = '📂';
             let $item = $(`
                 <div class="file-item">
-                    ${icon}<span class="file-item-name">${file}</span>
+                    ${icon} <span class="file-item-name">${file}</span>
                 </div>
             `);
             this.$fileRegion.append($item);

@@ -51,7 +51,7 @@ void Client::send(string str) {
             string str(buf);
             if (str.substr(0, 8) == "received") {
                 if (str.size() > 8) {
-                    printf("server had received %s\n", str.substr(8).c_str());
+                    // printf("server had received %s\n", str.substr(8).c_str());
                 }
                 break;
             }
@@ -75,10 +75,13 @@ void Client::sendfile(string file) {
     }
 }
 
-void Client::receive() {
+void Client::clone(string path) {
     int sockfd = sock->get_fd();
     // 向服务器发送 clone 请求
-    _write("clone");
+    _write("clone: " + path);
+
+    string project = getFileName(path);
+    project = join(Repository::CWD, project);
 
     char buf[BUFFER_SIZE];
     while (true) {
@@ -94,7 +97,7 @@ void Client::receive() {
         if (str.substr(0, 5) == "file:") {
             const string filename = str.substr(6);
             // printf("filename: %s\n", filename.c_str());
-            const string save_path = join(Repository::CWD, filename);
+            const string save_path = join(project, filename);
             mkdirOfPath(save_path);     // 如果父文件夹不存在，先创建父文件夹
 
             fout.open(save_path);

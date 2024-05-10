@@ -46,6 +46,7 @@ public:
     ostream& fout = std::cout;
     ofstream file;
     string username = "";
+    string project = "";
 
     Connection(EventLoop* loop, Socket* sock);
     ~Connection();

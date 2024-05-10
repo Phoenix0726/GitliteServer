@@ -27,7 +27,7 @@ public:
     ~Client();
     void send(string str="");
     void sendfile(string file);
-    void receive();
+    void clone(string path);
 };
 
 

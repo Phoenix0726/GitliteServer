@@ -1,14 +1,58 @@
-class UserInfo {
+class Menu {
     constructor(root) {
         this.root = root;
+        this.$menu = $(`
+            <div class="menu">
+                <div class="menu-bar">
+                    <div class="menu-item menu-code item-active">Code</div>
+                    <div class="menu-item menu-projects">Projects</div>
+                    <div class="menu-item menu-settings">Settings</div>
+                    <div class="menu-item menu-login">Login</div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+        `);
+        this.$menuCode = this.$menu.find(".menu-code");
+        this.$menuProjects = this.$menu.find(".menu-projects");
+        this.$menuSettings = this.$menu.find(".menu-settings");
+
+        this.$fileExplorer = this.root.fileExplorer.$fileExplorer;
+        this.$projectExplorer = this.root.projectExplorer.$projectExplorer;
+
+        this.root.$gitlitehub.prepend(this.$menu);
 
         this.start();
     }
 
     start() {
+        this.add_listening_events();
         // this.register();
         // this.login();
         this.getInfo();
+    }
+    
+    add_listening_events() {
+        let menuList = this.$menu.find('.menu-item');
+        for (let i = 0; i < menuList.length; i++) {
+            $(menuList[i]).click(function() {
+                $(this).addClass('item-active').siblings().removeClass('item-active');
+            });
+        }
+
+        this.$menuCode.click(() => {
+            this.hide();
+            this.$fileExplorer.show();
+        });
+
+        this.$menuProjects.click(() => {
+            this.hide();
+            this.$projectExplorer.show();
+        });
+    }
+
+    hide() {
+        this.$fileExplorer.hide();
+        this.$projectExplorer.hide();
     }
 
     register() {
@@ -65,7 +109,7 @@ class UserInfo {
             },
             success: resp => {
                 if (resp.result === "success") {
-                    console.log(resp);
+                    // console.log(resp);
                 } else {
                     console.log(resp.result);
                 }

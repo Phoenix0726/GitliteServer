@@ -11,7 +11,9 @@
     <script type="module">
         import {Gitlitehub} from "{% static 'js/dist/gitlitehub.js' %}"
         $(document).ready(function() {
-            let gitlitehub = new Gitlitehub("container");
+            let username = "{{ username }}";
+            let project = "{{ project }}";
+            let gitlitehub = new Gitlitehub("container", username, project);
         });
     </script>
 </body>

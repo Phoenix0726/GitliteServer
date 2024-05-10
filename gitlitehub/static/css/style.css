@@ -8,45 +8,85 @@
     width: 100%;
 }
 
-.file-explorer {
+/* Menu region */
+.menu {
     position: relative;
-    width: 70%;
-    margin: 5% auto;
-}
-
-.select-menu {
-    position: relative;
-    width: 70%;
+    width: 100%;
     margin: auto;
-    margin-bottom: 10px;
+    padding-top: 5%;
+    padding-bottom: 10px;
+    background-color: #f6f8fa;
 }
 
-.select-menu-item {
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.menu-bar {
+    position: relative;
+    width: 95%;
+    margin: auto;
+}
+
+.menu-item {
+    float: left;
+    width: 5vw;
+    height: 5vh;
+    line-height: 5vh;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0 2vw;
+}
+
+.menu-item:hover {
+    background-color: #ddd;
     cursor: pointer;
 }
 
-.select-menu-branches {
-    float: left;
+.menu-login {
+    float: right;
+}
+/* Menu region end */
+
+
+/* File explorer region */
+.file-explorer {
+    position: relative;
+    width: 65%;
+    margin: auto;
+    margin-top: 10px;
 }
 
-.select-menu-commits {
-    float: right;
+.fe-select-menu {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: #f6f8fa;
+}
+
+.fe-select-menu-item {
+    float: left;
+    width: 7vw;
+    height: 5vh;
+    line-height: 5vh;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.fe-select-menu-item:hover {
+    background-color: #ddd;
 }
 
 .branch-list {
     display: block;
     position: relative;
-    width: 70%;
+    width: 100%;
     margin: auto;
 }
 
 .branch-list-item {
     width: 100%;
-    padding: 5px;
+    padding: 7px;
     border: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
 .branch-list-item:hover {
@@ -56,15 +96,16 @@
 .commit-list {
     display: block;
     position: relative;
-    width: 70%;
+    width: 100%;
     margin: auto;
 }
 
 .commit-list-item {
     width: 100%;
-    padding: 5px;
+    padding: 7px;
     border: 1px solid #ddd;
     white-space: pre-wrap;
+    box-sizing: border-box;
 }
 
 .commit-list-item:hover {
@@ -74,18 +115,28 @@
 .file-region {
     display: block;
     position: relative;
-    width: 70%;
+    width: 100%;
     margin: auto;
 }
 
-.file-item {
+.file-path {
     width: 100%;
-    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.file-item {
+    position: relative;
+    padding: 7px;
     border: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
 .file-item:hover {
     background-color: #eee;
+}
+
+.file-item-name {
+    cursor: pointer;
 }
 
 .file-content {
@@ -93,3 +144,88 @@
     white-space: pre-wrap;
     border: 1px solid #ddd;
 }
+/* File explorer region end */
+
+/* Project explorer region */
+.project-explorer {
+    position: relative;
+    width: 65%;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.pe-select-menu {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: #f6f8fa;
+}
+
+.pe-select-menu-item {
+    float: left;
+    width: 7vw;
+    height: 5vh;
+    line-height: 5vh;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.pe-select-menu-item:hover {
+    background-color: #ddd;
+}
+
+.item-active {
+    border-bottom: 1px solid #fd8c73;
+}
+
+.project-list {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: auto;
+}
+
+.project-list-item {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.project-list-item:hover {
+    background-color: #eee;
+}
+
+.new-project {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+.new-project-item {
+    margin: 10px auto;
+}
+
+.new-project-item > span {
+    display: inline-block;
+    width: 10vw;
+    font-size: 15px;
+}
+
+.new-project-item > input {
+    height: 30px;
+    width: 30vw;
+}
+
+.new-project-submit {
+    height: 30px;
+    width: 10vw;
+    color: white;
+    background-color: #1f883d;
+    border: none;
+    border-radius: 10px;
+}
+/* Project explorer region end */

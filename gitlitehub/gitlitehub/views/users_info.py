@@ -57,7 +57,7 @@ def login(request):
     })
 
 
-def get_info(request):
+def get_info(request, username=None, project=None):
     user = request.user
     if not user.is_authenticated:
         return JsonResponse({

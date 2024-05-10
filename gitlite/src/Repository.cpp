@@ -380,10 +380,11 @@ void Repository::push() {
         printf("please set ther username first!");
         return;
     }
+    string project = getFileName(CWD);
 
     Client client;
-
     client.send("username: " + username);
+    client.send("project: " + project);
 
     queue<string> fileq;
     fileq.push(GITLITE_DIR);
@@ -402,17 +403,13 @@ void Repository::push() {
 }
 
 // gitlite clone
-void Repository::clone() {
-    string username = getUsername();
-    if (username == "") {
-        printf("please set ther username first!");
-        return;
-    }
+void Repository::clone(string path) {
+    // 创建项目文件夹
+    string project = getFileName(path);
+    mkdir(project.c_str(), S_IRWXU);
 
     Client client;
-
-    client.send("username: " + username);
-    client.receive();
+    client.clone(path);
 
     // 根据 .gitlite 读出当前 commit 源文件
     Commit curCommit = getCurCommit();

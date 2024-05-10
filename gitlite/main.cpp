@@ -129,9 +129,9 @@ int main(int argc, char** argv) {
         validateArgsNum(argc, 2);
         Repository::push();
     } else if (op == "clone") {
-        Repository::checkIfInitialized();
-        validateArgsNum(argc, 2);
-        Repository::clone();
+        validateArgsNum(argc, 3);
+        string path = argv[2];
+        Repository::clone(path);
     } else if (op == "set") {
         Repository::checkIfInitialized();
         validateArgsNum(argc, 4);
