@@ -5,10 +5,10 @@ export class Gitlitehub {
         
         this.username = username;
         this.project = project;
-        console.log(username, project);
 
         this.fileExplorer = new FileExplorer(this);
         this.projectExplorer = new ProjectExplorer(this);
+        this.userPanel = new UserPanel(this);
         this.menu = new Menu(this);
     }
 };

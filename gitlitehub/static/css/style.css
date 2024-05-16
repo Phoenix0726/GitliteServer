@@ -328,3 +328,79 @@
     cursor: pointer;
 }
 /* Project explorer region end */
+
+/* User panel region */
+.user-panel {
+    position: fixed;
+    z-index: 1;
+    width: 20vw;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    background-color: #f6f8fa;
+    border-radius: 10px 0 0 10px;
+    box-shadow: 0px 0px 0px 1px #d0d7de80, 0px 6px 12px -3px #424a530a, 0px 6px 18px 0px #424a531f;
+}
+
+.user-panel-header {
+    position: relative;
+    width: 90%;
+    margin: 20px auto;
+    height: 32px;
+}
+
+.user-panel-header-photo {
+    position: relative;
+    float: left;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.user-panel-header-photo > img {
+    position: relative;
+    height: 100%;
+    border: 1px solid #1f232826;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+}
+
+.user-panel-header-name {
+    position: relative;
+    float: left;
+    height: 100%;
+}
+
+.user-panel-header-name > span {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    height: 50%;
+}
+
+.user-panel-header-username {
+    color: #1f2328;
+}
+
+.user-panel-header-tickname {
+    color: #636c76;
+}
+
+.user-panel-menu {
+    position: relative;
+    width: 90%;
+    margin: 30px auto;
+}
+
+.user-panel-menu-item {
+    position: relative;
+    margin: 5px auto;
+    padding: 15px;
+    cursor: pointer;
+    color: #1f2328;
+}
+
+.user-panel-menu-item:hover {
+    background-color: #eee;
+}
+/* User panel region end */

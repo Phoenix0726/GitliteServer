@@ -16,17 +16,25 @@ class Menu {
                         <img src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png"/>
                     </div>
                 </div>
-                <div class="menu-bar">
+                <div class="menu-bar menu-file-explorer">
                     <div class="menu-item menu-code item-active">Code</div>
-                    <div class="menu-item menu-projects">Projects</div>
-                    <div class="menu-item menu-settings">Settings</div>
+                    <div class="menu-item menu-issue">Issues</div>
+                    <div style="clear: both;"></div>
+                </div>
+                <div class="menu-bar menu-project-explorer">
+                    <div class="menu-item menu-projects item-active">Projects</div>
+                    <div class="menu-item menu-stars">Stars</div>
                     <div style="clear: both;"></div>
                 </div>
             </div>
         `);
+        this.$menuFileExplorer = this.$menu.find(".menu-file-explorer");
+
+        this.$menuProjectExplorer = this.$menu.find(".menu-project-explorer");
+        this.$menuProjectExplorer.hide();
+
         this.$menuCode = this.$menu.find(".menu-code");
         this.$menuProjects = this.$menu.find(".menu-projects");
-        this.$menuSettings = this.$menu.find(".menu-settings");
 
         this.$fileExplorer = this.root.fileExplorer.$fileExplorer;
         this.$projectExplorer = this.root.projectExplorer.$projectExplorer;
@@ -44,6 +52,10 @@ class Menu {
     }
     
     add_listening_events() {
+        this.$menu.find('.nav-user-photo').click(() => {
+            this.root.userPanel.$userPanel.show();
+        });
+
         let menuList = this.$menu.find('.menu-item');
         for (let i = 0; i < menuList.length; i++) {
             $(menuList[i]).click(function() {
@@ -53,17 +65,37 @@ class Menu {
 
         this.$menuCode.click(() => {
             this.hide();
-            this.$fileExplorer.show();
+            this.fileExplorerShow();
         });
 
         this.$menuProjects.click(() => {
             this.hide();
-            this.$projectExplorer.show();
+            this.projectExplorerShow()
         });
     }
 
     hide() {
+        this.fileExplorerHide();
+        this.projectExplorerHide();
+    }
+
+    fileExplorerShow() {
+        this.$menuFileExplorer.show();
+        this.$fileExplorer.show();
+    }
+
+    fileExplorerHide() {
+        this.$menuFileExplorer.hide();
         this.$fileExplorer.hide();
+    }
+
+    projectExplorerShow() {
+        this.$menuProjectExplorer.show();
+        this.$projectExplorer.show();
+    }
+
+    projectExplorerHide() {
+        this.$menuProjectExplorer.hide();
         this.$projectExplorer.hide();
     }
 
